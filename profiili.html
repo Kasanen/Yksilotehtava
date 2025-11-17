@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta name="description" content="JavaScriptModuulit" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Opira</title>
+
+    <!--Style-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="Styling/style.css" />
+    <link rel="stylesheet" href="Styling/profiiliS.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <!--Scripts-->
+    <script src="data.js" defer></script>
+    <script src="functional.js" defer></script>
+  </head>
+
+  <body>
+    <!--TopBar-->
+    <div class="topnav">
+      <a href="./index.html" class="active">Opira</a>
+      <div id="myLinks">
+        <a href="./index.html?#h">Ravintolat</a>
+        <a href="./index.html?#m">Kartta</a>
+      </div>
+      <a href="javascript:void(0);" class="icon" onclick="openBurger()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+
+    <!--Content-->
+
+    <!--Home-->
+    <section id="h" class="home">
+      <div>
+        <h1>Hei, Matti Meikäläinen!</h1>
+        <p>Asiakas profiili</p>
+
+        <div class="flex-container">
+          <div
+            class="flex-item"
+            style="height: 280px; overflow: auto; width: 100%"
+          >
+            <img src="./Photos/avatar.png" alt="Avatar" class="avatar" />
+            <h3>Käyttäjätunnus</h3>
+            <p>Matti Meikäläinen</p>
+            <h3>Salasana</h3>
+            <p>salakala</p>
+            <div class="dropdown">
+              <button class="dropbtn" onclick="openModal()">Muokkaa</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="Modal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="closeModal" onclick="closeModal()">&times;</span>
+        <h2>Muokkaa tietoja</h2>
+        <p>Tietosi ovat suojattu.</p>
+        <form action="javascript:;" onsubmit=" checkAccount() ">
+          <input id="ACC" type="text" placeholder="Käyttäjätunnus" />
+          <input id="PASS" type="text" placeholder="Salasana" />
+          <p>Lisää profiilikuva</p>
+          <input type="file" accept="image/png, image/jpeg" />
+          <input type="submit" value="Muokkaa" />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
