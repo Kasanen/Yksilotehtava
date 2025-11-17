@@ -1,11 +1,11 @@
-const url = 'https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants';
+const url = "https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants";
 
 /* -- Base -- */
 async function getData(requestURL) {
   try {
     const response = await fetch(requestURL, {
       headers: {
-        'x-api-key': 'reqres-free-v1',
+        "x-api-key": "reqres-free-v1",
       },
     });
 
@@ -15,7 +15,7 @@ async function getData(requestURL) {
     console.log(data);
     return data;
   } catch (err) {
-    console.error('Error:', err);
+    console.error("Error:", err);
   }
 }
 
@@ -23,7 +23,7 @@ async function getMenu(requestURL) {
   try {
     const response = await fetch(requestURL, {
       headers: {
-        'x-api-key': 'reqres-free-v1',
+        "x-api-key": "reqres-free-v1",
       },
     });
 
@@ -32,17 +32,28 @@ async function getMenu(requestURL) {
     const data = await response.json();
     return data;
   } catch (err) {
-    console.error('Error:', err);
+    console.error("Error:", err);
   }
 }
 
-async function fetchMenu(id) {
+async function fetchDailyMenu(id) {
   const data = await getMenu(
     `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${id}/fi`
   );
 
   const menuItems = data.courses.map((item) => item.name);
   return menuItems;
+}
+
+async function fetchWeeklyMenu(id) {
+  const data = await getMenu(
+    `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/weekly/${id}/fi`
+  );
+
+  return (data.days || []).map((day) => ({
+    date: day.date,
+    courses: (day.courses || []).map((c) => c.name),
+  }));
 }
 
 // User location
@@ -64,10 +75,10 @@ function getUserLocation(callback) {
 function getUserLocationPromise() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
-      return reject(new Error('Geolocation not supported'));
+      return reject(new Error("Geolocation not supported"));
     }
     navigator.geolocation.getCurrentPosition(
-      (pos) => resolve({lat: pos.coords.latitude, lon: pos.coords.longitude}),
+      (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
       (err) => reject(err)
     );
   });
@@ -111,8 +122,7 @@ async function fetchRestaurants(filterNumb) {
       await sortByLoc(restaurants);
       break;
     default:
-      await sortByName(restaurants);
-      console.log('Failed to filter by choice: ' + filterNumb);
+      console.log("Filter staying on " + filterNumb);
   }
   return restaurants;
 }
@@ -151,21 +161,22 @@ async function sortByLoc(list) {
     });
   } catch (err) {
     console.error(
-      'Could not get user location, falling back to name sort:',
+      "Could not get user location, falling back to name sort:",
       err
     );
     sortByName(list);
   }
 }
 
+/* -- Main menu restaurant data -- */
 async function main(filterNumb) {
   const restaurants = await fetchRestaurants(filterNumb);
 
   // Printing out
-  const table = document.querySelector('table');
-  table.innerHTML = '';
+  const table = document.querySelector("table");
+  table.innerHTML = "";
   table.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     `
               <tr id="table-top">
                 <th>Nimi</th>
@@ -179,9 +190,9 @@ async function main(filterNumb) {
   restaurants.map((restaurant) => {
     trId++;
     table.insertAdjacentHTML(
-      'beforeend',
+      "beforeend",
       `
-            <tr id="${trId}" onclick="clicked(this.id)" style="cursor: pointer">
+            <tr id="${trId}" onclick="showRestaurantModal(this.id)" style="cursor: pointer">
                 <td>${restaurant.name}</td>
                 <td>${restaurant.address}</td>
             </tr>
@@ -192,44 +203,86 @@ async function main(filterNumb) {
 
 main(1);
 
-// Clickable
-async function clicked(id) {
+// Restaurant menu modal
+async function showRestaurantModal(id) {
   const restaurants = await fetchRestaurants();
 
-  const menu = await fetchMenu(restaurants[id - 1]._id);
-  const menuHTML = menu.map((item) => `<li>${item}</li>`).join('');
+  const dailyMenu = await fetchDailyMenu(restaurants[id - 1]._id);
+  const dailyMenuHTML = dailyMenu.map((item) => `<li>${item}</li>`).join("");
 
-  const dialog = document.getElementById('Modal2');
-  const modalText = document.getElementById('modalText');
+  const weeklyMenu = await fetchWeeklyMenu(restaurants[id - 1]._id);
+  const weeklyMenuHTML = weeklyMenu
+    .map(
+      (day) =>
+        `<h3><strong>${day.date}</strong></h3>${day.courses
+          .map((c) => `<li>${c}</li>`)
+          .join("")}</li>`
+    )
+    .join("");
+  const dialog = document.getElementById("Modal2");
+  const modalText = document.getElementById("modalText");
 
+  // Highlight text color
   for (let i = 1; i < restaurants.length; i++) {
-    document.getElementById(i).classList.remove('highlight');
+    document.getElementById(i).classList.remove("highlight");
   }
-  document.getElementById(id).classList.add('highlight');
+  document.getElementById(id).classList.add("highlight");
 
-  modalText.innerHTML = '';
-  modalText.insertAdjacentHTML(
-    'beforeend',
-    `
-    <span class="closeModal" onclick="closeModal2()">&times;</span>
+  modalText.innerHTML = "";
+  // Filtered selection
+  const savedType = localStorage.getItem("menuType");
+  switch (savedType) {
+    case "daily":
+      modalText.insertAdjacentHTML(
+        "beforeend",
+        `
+          <span class="closeModal" onclick="closeModal2()">&times;</span>
             <ul>
-                <li>Ravintolan nimi: ${restaurants[id - 1].name}</li>
-                <li>Osoite: ${restaurants[id - 1].address}</li>
-                <li>Postinumero: ${restaurants[id - 1].postalCode}</li>
-                <li>Kaupunki: ${restaurants[id - 1].city}</li>
-                <li>Puhelin numero: ${restaurants[id - 1].phone}</li>
-                <li>Yritys: ${restaurants[id - 1].company}</li>
-                <li>Suosikki:
+                <h3> Päivän Menu </h3>
+                ${dailyMenuHTML}
+                <h3>Suosikki:
                 <input type="checkbox" id="favorite" checked>
-                </li>
-                                <h4> Päivän Menu </h4>
-                ${menuHTML}
+                </h3>
             </ul>
         `
-  );
-  modalText.parentElement.style.display = 'block';
-  document.documentElement.classList.add('modal-open');
+      );
+      break;
+    case "weekly":
+      modalText.insertAdjacentHTML(
+        "beforeend",
+        `
+          <span class="closeModal" onclick="closeModal2()">&times;</span>
+            <ul>
+                <h3> Viikon Menu </h3>
+                ${weeklyMenuHTML}
+                <h3>Suosikki:
+                <input type="checkbox" id="favorite" checked>
+                </h3>
+            </ul>
+        `
+      );
+      break;
+    default:
+      console.log("Error in filtering");
+  }
+
+  modalText.parentElement.style.display = "block";
+  document.documentElement.classList.add("modal-open");
 }
+
+// Weekly / Daily selector
+document.querySelectorAll(".menuType").forEach((link) => {
+  link.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    const type = this.dataset.type;
+
+    // Save for later
+    localStorage.setItem("menuType", type);
+
+    console.log("User selected:", type);
+  });
+});
 
 /* -- MAP -- */
 async function mapOutput() {
@@ -239,22 +292,22 @@ async function mapOutput() {
     const userLat = loc.lat;
     const userLon = loc.lon;
 
-    var map = L.map('map').setView([userLat, userLon], 12);
+    var map = L.map("map").setView([userLat, userLon], 12);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
 
     const redDivIcon = L.divIcon({
-      className: 'user-marker',
+      className: "user-marker",
       html: '<div class="dot"></div>',
       iconSize: [20, 20],
     });
 
     getUserLocation((loc) => {
-      L.marker([userLat, userLon], {icon: redDivIcon}).addTo(map);
+      L.marker([userLat, userLon], { icon: redDivIcon }).addTo(map);
     });
 
     restaurants.map((restaurant) => {
@@ -263,7 +316,7 @@ async function mapOutput() {
         restaurant.location.coordinates[0],
       ]).addTo(map);
       marker.bindPopup(
-        '<h3>' + restaurant.name + '</h3><p>' + restaurant.address + '</p>'
+        "<h3>" + restaurant.name + "</h3><p>" + restaurant.address + "</p>"
       );
     });
   });
@@ -272,16 +325,16 @@ async function mapOutput() {
 mapOutput();
 
 /* Modal for data */
-var dataModal = document.getElementById('Modal2');
+var dataModal = document.getElementById("Modal2");
 
 function openModal() {
-  dataModal.style.display = 'block';
-  document.documentElement.classList.add('modal-open');
+  dataModal.style.display = "block";
+  document.documentElement.classList.add("modal-open");
 }
 
 function closeModal2() {
-  dataModal.style.display = 'none';
-  document.documentElement.classList.remove('modal-open');
+  dataModal.style.display = "none";
+  document.documentElement.classList.remove("modal-open");
 }
 
 window.onclick = function (event) {
