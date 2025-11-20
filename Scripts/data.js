@@ -1,24 +1,6 @@
 const url = "https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants";
 
 /* -- Base -- */
-async function getData(requestURL) {
-  try {
-    const response = await fetch(requestURL, {
-      headers: {
-        "x-api-key": "reqres-free-v1",
-      },
-    });
-
-    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (err) {
-    console.error("Error:", err);
-  }
-}
-
 async function getMenu(requestURL) {
   try {
     const response = await fetch(requestURL, {
@@ -40,7 +22,6 @@ async function fetchDailyMenu(id) {
   const data = await getMenu(
     `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${id}/fi`
   );
-
   const menuItems = data.courses.map((item) => item.name);
   return menuItems;
 }
@@ -101,7 +82,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 /* -- Fetch restaurants show -- */
 async function fetchRestaurants(filterNumb) {
-  const data = await getData(url);
+  const data = await getMenu(url);
 
   const restaurants = data.map((r) => ({
     _id: r._id,
@@ -266,7 +247,7 @@ async function showRestaurantModal(id) {
       console.log("Error in filtering");
   }
 
-  modalText.parentElement.style.display = "block";
+  modalText.parentElement.style.display = "flex";
   document.documentElement.classList.add("modal-open");
 }
 
@@ -328,7 +309,7 @@ mapOutput();
 var dataModal = document.getElementById("Modal2");
 
 function openModal() {
-  dataModal.style.display = "block";
+  dataModal.style.display = "flex";
   document.documentElement.classList.add("modal-open");
 }
 

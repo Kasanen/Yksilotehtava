@@ -30,8 +30,11 @@
     />
 
     <!--Scripts-->
-    <script src="data.js" defer></script>
-    <script src="functional.js" defer></script>
+    <script src="./Scripts/data.js" defer></script>
+    <script src="./Scripts/functional.js" defer></script>
+    <script src="./Scripts/IntersectionObserver.js" defer></script>
+    <script type="module" src="./Scripts/loginData.js" defer></script>
+
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -103,11 +106,28 @@
         <span class="closeModal" onclick="closeModal()">&times;</span>
         <h2>Kirjaudu sisään!</h2>
         <p>Tietosi ovat suojattu.</p>
-        <form action="javascript:;" onsubmit=" checkAccount() ">
-          <input id="ACC" type="text" placeholder="Käyttäjätunnus" />
-          <input id="PASS" type="text" placeholder="Salasana" />
-          <input type="submit" value="Kirjaudu / Rekisteröidy" />
-          <a href="./profiili.html">Profiili sivu</a>
+        <form id="loginSubmit">
+          <input id="ACC" type="username" placeholder="Käyttäjätunnus" />
+          <input id="PASS" type="password" placeholder="Salasana" />
+          <input type="submit" value="Kirjaudu" />
+          <a onClick="openRegisterModal()">Uusi käyttäjä?</a>
+        </form>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="closeModal" onclick="closeModal()">&times;</span>
+        <h2>Rekisteröidy!</h2>
+        <p>Tietosi ovat suojattu.</p>
+        <form id="registerSubmit">
+          <input id="ACCReg" type="username" placeholder="Käyttäjätunnus" />
+          <input id="PASSReg" type="password" placeholder="Salasana" />
+          <input id="MAILReg" type="email" placeholder="Sähköposti" />
+
+          <input type="submit" value="Rekisteröidy" />
         </form>
       </div>
     </div>

@@ -51,6 +51,7 @@ i {
 a {
   color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 
 button {
@@ -311,8 +312,10 @@ ul li {
 }
 
 /* Modal inputs */
-input[type="text"],
-select {
+input[type="username"],
+input[type="password"],
+input[type="email"],
+select { 
   width: 100%;
   padding: 12px;
   margin: 8px 0;
