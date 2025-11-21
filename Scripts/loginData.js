@@ -1,3 +1,5 @@
+// -- Registration and Login Functions -- //
+// Registration
 async function registerFunction() {
   const accEl = document.getElementById("ACCReg");
   const passEl = document.getElementById("PASSReg");
@@ -40,6 +42,7 @@ async function registerFunction() {
   }
 }
 
+// Login
 async function loginFunction() {
   const accEl = document.getElementById("ACC");
   const passEl = document.getElementById("PASS");
@@ -65,26 +68,28 @@ async function loginFunction() {
 
     const data = await response.json();
 
-    localStorage.setItem("authToken", data.token);
+    console.log(data.token);
+
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("username", username);
+
     alert("Kirjautuminen onnistui");
-    console.log("Ennen logged");
-    logged(username);
+    logged();
   } catch (err) {
     console.error(err);
     alert("Kirjautuminen epäonnistui");
   }
 }
 
-// -- Modal -- //
+// -- Login state -- //
+// Modal
 const loginModal = document.getElementById("Modal");
 const registerModal = document.getElementById("registerModal");
 const loginBtn = document.getElementById("loginBtn");
 
-function logged(username) {
-  console.log("Logged");
-
+function logged() {
   // Login button
-  loginBtn.textContent = username;
+  loginBtn.textContent = localStorage.getItem("username");
   loginBtn.onclick = null;
   loginBtn.href = "./profiili.html";
 

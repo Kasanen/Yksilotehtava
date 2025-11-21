@@ -55,9 +55,18 @@ a {
 }
 
 button {
+  background-color: goldenrod;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
+  border-radius: 4px;
+  transition: filter 0.2s;
+}
+
+button:hover {
+  filter: brightness(85%);
 }
 
 section {
@@ -315,7 +324,7 @@ ul li {
 input[type="username"],
 input[type="password"],
 input[type="email"],
-select { 
+select {
   width: 100%;
   padding: 12px;
   margin: 8px 0;

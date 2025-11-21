@@ -37,3 +37,15 @@ window.onclick = function (event) {
     closeModal();
   }
 };
+
+// -- On page load -- //
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  const username = localStorage.getItem("username");
+
+  if (token && username) {
+    loginBtn.textContent = username;
+    loginBtn.onclick = null;
+    loginBtn.href = "./profiili.html";
+  }
+});

@@ -24,9 +24,7 @@
     />
 
     <!--Scripts-->
-    <script src="./Scripts/data.js" defer></script>
-    <script src="./Scripts/functional.js" defer></script>
-    <script type="module" src="./Scripts/loginData.js" defer></script>
+    <script src="./Scripts/profileFunctional.js" defer></script>
   </head>
 
   <body>
@@ -47,22 +45,27 @@
     <!--Home-->
     <section id="h" class="home">
       <div>
-        <h1>Hei, Matti Meikäläinen!</h1>
-        <p>Asiakas profiili</p>
+        <h2>Asiakas profiili</h2>
 
         <div class="flex-container">
-          <div
-            class="flex-item"
-            style="height: 280px; overflow: auto; width: 100%"
-          >
-            <img src="./Photos/avatar.png" alt="Avatar" class="avatar" />
+          <div class="flex-item" style="overflow: auto">
+            <img
+              id="avatarHolder"
+              src="./Photos/avatar.png"
+              alt="Avatar"
+              class="avatar"
+            />
             <h3>Käyttäjätunnus</h3>
-            <p>Matti Meikäläinen</p>
-            <h3>Salasana</h3>
-            <p>salakala</p>
-            <div class="dropdown">
-              <button class="dropbtn" onclick="openModal()">Muokkaa</button>
-            </div>
+            <p id="nameHolder"></p>
+            <h3>Sähköposti</h3>
+            <p id="mailHolder"></p>
+            <button onclick="openModal()">Muokkaa</button>
+            <button
+              onclick="logOut()"
+              style="background-color: rgb(58, 131, 199)"
+            >
+              Kirjaudu ulos
+            </button>
           </div>
         </div>
       </div>
@@ -75,13 +78,17 @@
         <span class="closeModal" onclick="closeModal()">&times;</span>
         <h2>Muokkaa tietoja</h2>
         <p>Tietosi ovat suojattu.</p>
-        <form action="javascript:;" onsubmit=" checkAccount() ">
-          <input id="ACC" type="text" placeholder="Käyttäjätunnus" />
-          <input id="PASS" type="text" placeholder="Salasana" />
-          <p>Lisää profiilikuva</p>
-          <input type="file" accept="image/png, image/jpeg" />
+        <form action="javascript:;" onsubmit=" profileEdit() ">
+          <input id="ACC" type="username" placeholder="Käyttäjätunnus" />
+          <input id="MAIL" type="email" placeholder="Sähköposti" />
+          <input id="PASS" type="password" placeholder="Salasana" />
           <input type="submit" value="Muokkaa" />
         </form>
+        <p>Lisää profiilikuva</p>
+        <input id="AVATAR" type="file" accept="image/png, image/jpeg" />
+        <button onclick="deleteProfile()" style="background-color: red">
+          Poista tili
+        </button>
       </div>
     </div>
   </body>

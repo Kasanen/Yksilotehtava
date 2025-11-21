@@ -151,8 +151,10 @@ async function sortByLoc(list) {
 
 /* -- Main menu restaurant data -- */
 async function main(filterNumb) {
+  // Setting global filter
+  window.currentRestaurantFilter =
+    typeof filterNumb === "number" ? filterNumb : 0;
   const restaurants = await fetchRestaurants(filterNumb);
-
   // Printing out
   const table = document.querySelector("table");
   table.innerHTML = "";
@@ -182,11 +184,10 @@ async function main(filterNumb) {
   });
 }
 
-main(1);
-
 // Restaurant menu modal
 async function showRestaurantModal(id) {
-  const restaurants = await fetchRestaurants();
+  const filterNumb = window.currentRestaurantFilter ?? 0;
+  const restaurants = await fetchRestaurants(filterNumb);
 
   const dailyMenu = await fetchDailyMenu(restaurants[id - 1]._id);
   const dailyMenuHTML = dailyMenu.map((item) => `<li>${item}</li>`).join("");
@@ -219,6 +220,7 @@ async function showRestaurantModal(id) {
         `
           <span class="closeModal" onclick="closeModal2()">&times;</span>
             <ul>
+                <h3> ${restaurants[id - 1].name} </h3>
                 <h3> Päivän Menu </h3>
                 ${dailyMenuHTML}
                 <h3>Suosikki:
@@ -234,6 +236,7 @@ async function showRestaurantModal(id) {
         `
           <span class="closeModal" onclick="closeModal2()">&times;</span>
             <ul>
+                <h3> ${restaurants[id - 1].name} </h3>
                 <h3> Viikon Menu </h3>
                 ${weeklyMenuHTML}
                 <h3>Suosikki:
@@ -255,7 +258,6 @@ async function showRestaurantModal(id) {
 document.querySelectorAll(".menuType").forEach((link) => {
   link.addEventListener("click", function (e) {
     e.preventDefault();
-
     const type = this.dataset.type;
 
     // Save for later
@@ -303,8 +305,6 @@ async function mapOutput() {
   });
 }
 
-mapOutput();
-
 /* Modal for data */
 var dataModal = document.getElementById("Modal2");
 
@@ -323,3 +323,12 @@ window.onclick = function (event) {
     closeModal2();
   }
 };
+
+// -- On page load -- //
+document.addEventListener("DOMContentLoaded", () => {
+  mapOutput();
+
+  main(1);
+
+  localStorage.setItem("menuType", "daily");
+});
