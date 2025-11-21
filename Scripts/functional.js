@@ -11,9 +11,10 @@ function openBurger() {
 }
 
 /* -- Modal -- */
-var loginModal = document.getElementById("Modal");
-var registerModal = document.getElementById("registerModal");
-var loginBtn = document.getElementById("loginBtn");
+const dataModal = document.getElementById("Modal2");
+const loginModal = document.getElementById("Modal");
+const registerModal = document.getElementById("registerModal");
+const loginBtn = document.getElementById("loginBtn");
 
 function openModal() {
   loginModal.style.display = "flex";
@@ -26,6 +27,7 @@ function openRegisterModal() {
 }
 
 function closeModal() {
+  dataModal.style.display = "none";
   loginModal.style.display = "none";
   registerModal.style.display = "none";
   document.documentElement.classList.remove("modal-open");
@@ -33,7 +35,11 @@ function closeModal() {
 
 /* -- Window -- */
 window.onclick = function (event) {
-  if (event.target == loginModal || event.target == registerModal) {
+  if (
+    event.target == dataModal ||
+    event.target == loginModal ||
+    event.target == registerModal
+  ) {
     closeModal();
   }
 };

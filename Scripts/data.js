@@ -201,7 +201,6 @@ async function showRestaurantModal(id) {
           .join("")}</li>`
     )
     .join("");
-  const dialog = document.getElementById("Modal2");
   const modalText = document.getElementById("modalText");
 
   // Highlight text color
@@ -218,13 +217,13 @@ async function showRestaurantModal(id) {
       modalText.insertAdjacentHTML(
         "beforeend",
         `
-          <span class="closeModal" onclick="closeModal2()">&times;</span>
+          <span class="closeModal" onclick="closeModal()">&times;</span>
             <ul>
                 <h3> ${restaurants[id - 1].name} </h3>
                 <h3> Päivän Menu </h3>
                 ${dailyMenuHTML}
                 <h3>Suosikki:
-                <input type="checkbox" id="favorite" checked>
+                <input type="checkbox" id="favorite">
                 </h3>
             </ul>
         `
@@ -234,13 +233,13 @@ async function showRestaurantModal(id) {
       modalText.insertAdjacentHTML(
         "beforeend",
         `
-          <span class="closeModal" onclick="closeModal2()">&times;</span>
+          <span class="closeModal" onclick="closeModal()">&times;</span>
             <ul>
                 <h3> ${restaurants[id - 1].name} </h3>
                 <h3> Viikon Menu </h3>
                 ${weeklyMenuHTML}
                 <h3>Suosikki:
-                <input type="checkbox" id="favorite" checked>
+                <input type="checkbox" id="favorite">
                 </h3>
             </ul>
         `
@@ -306,23 +305,11 @@ async function mapOutput() {
 }
 
 /* Modal for data */
-var dataModal = document.getElementById("Modal2");
 
 function openModal() {
   dataModal.style.display = "flex";
   document.documentElement.classList.add("modal-open");
 }
-
-function closeModal2() {
-  dataModal.style.display = "none";
-  document.documentElement.classList.remove("modal-open");
-}
-
-window.onclick = function (event) {
-  if (event.target == dataModal) {
-    closeModal2();
-  }
-};
 
 // -- On page load -- //
 document.addEventListener("DOMContentLoaded", () => {
