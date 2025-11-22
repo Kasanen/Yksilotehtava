@@ -54,6 +54,15 @@ a {
   cursor: pointer;
 }
 
+ul {
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  border: 1px solid #ccc;
+}
+
 button {
   background-color: goldenrod;
   color: white;
@@ -265,7 +274,7 @@ td {
 }
 
 ul li {
-  padding: 2% 0;
+  padding: 2% 2%;
 }
 
 .highlight {

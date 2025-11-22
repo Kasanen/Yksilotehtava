@@ -22,8 +22,14 @@ async function fetchDailyMenu(id) {
   const data = await getMenu(
     `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${id}/fi`
   );
-  const menuItems = data.courses.map((item) => item.name);
-  return menuItems;
+  console.log("Daily menu data:", data);
+
+  const courses = data.courses;
+  return courses.map((c) => ({
+    name: c.name,
+    price: c.price,
+    diets: c.diets,
+  }));
 }
 
 async function fetchWeeklyMenu(id) {
@@ -33,7 +39,11 @@ async function fetchWeeklyMenu(id) {
 
   return (data.days || []).map((day) => ({
     date: day.date,
-    courses: (day.courses || []).map((c) => c.name),
+    courses: (day.courses || []).map((c) => ({
+      name: c.name,
+      price: c.price,
+      diets: c.diets,
+    })),
   }));
 }
 
@@ -243,17 +253,35 @@ async function showRestaurantModal(id) {
   const restaurants = await fetchRestaurants(filterNumb);
 
   const dailyMenu = await fetchDailyMenu(restaurants[id - 1]._id);
-  const dailyMenuHTML = dailyMenu.map((item) => `<li>${item}</li>`).join("");
+  const dailyMenuHTML = dailyMenu.length
+    ? `${dailyMenu
+        .map(
+          (c) => `<li>
+          <h4>${c.name}</h4>
+          <p>Hinta: ${c.price} </p>
+          <p>Dieetit: ${c.diets.join(", ")}</p>
+          </li>`
+        )
+        .join("")}`
+    : "<p>Päivän menu ei saatavilla</p>";
 
   const weeklyMenu = await fetchWeeklyMenu(restaurants[id - 1]._id);
-  const weeklyMenuHTML = weeklyMenu
-    .map(
-      (day) =>
-        `<h3><strong>${day.date}</strong></h3>${day.courses
-          .map((c) => `<li>${c}</li>`)
-          .join("")}</li>`
-    )
-    .join("");
+  const weeklyMenuHTML = weeklyMenu.length
+    ? `${weeklyMenu
+        .map(
+          (day) =>
+            `<h3><strong>${day.date}</strong></h3>${day.courses
+              .map(
+                (c) => `<li>
+                <h4>${c.name}</h4>
+                <p>Hinta: ${c.price} </p>
+                <p>Dieetit: ${c.diets.join(", ")}</p>
+                </li>`
+              )
+              .join("")}`
+        )
+        .join("")}`
+    : "<p>Viikon menu ei saatavilla</p>";
   const modalText = document.getElementById("modalText");
 
   // Highlight text color
