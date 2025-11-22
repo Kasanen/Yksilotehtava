@@ -1,4 +1,4 @@
-// -- Fetching -- //
+// -- User calls -- //
 const token = localStorage.getItem("token");
 
 const accEl = document.getElementById("ACC");
@@ -23,6 +23,8 @@ async function profileFetch() {
     }
 
     const data = await response.json();
+
+    console.log("Profile data fetched:", data);
 
     const avatarHolder = document.getElementById("avatarHolder");
     const nameHolder = document.getElementById("nameHolder");
@@ -78,7 +80,6 @@ async function profileEdit() {
   }
 }
 
-// -- Profile picture upload -- //
 // Upload avatar listener
 avatarEl.addEventListener("change", (e) => {
   const file = e.target.files[0];

@@ -33,7 +33,8 @@
     <script src="./Scripts/data.js" defer></script>
     <script src="./Scripts/functional.js" defer></script>
     <script src="./Scripts/IntersectionObserver.js" defer></script>
-    <script type="module" src="./Scripts/loginData.js" defer></script>
+    <script src="./Scripts/loginData.js" defer></script>
+    <script src="./Scripts/profileFavorites.js" defer></script>
 
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -69,7 +70,7 @@
           <div class="dropdown-content">
             <a onclick="main(1)">Nimellä</a>
             <a onclick="main(2)">Etäisyydellä</a>
-            <a>Suosikit</a>
+            <a onclick="main(3)">Suosikki</a>
             <p>-- Menu valinta --</p>
             <a class="menuType" data-type="daily">Päivittäin</a>
             <a class="menuType" data-type="weekly">Viikottain</a>

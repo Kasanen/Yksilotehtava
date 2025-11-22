@@ -83,19 +83,19 @@ async function loginFunction() {
 
 // -- Login state -- //
 // Modal
-const loginModal = document.getElementById("Modal");
-const registerModal = document.getElementById("registerModal");
-const loginBtn = document.getElementById("loginBtn");
+const loginModal2 = document.getElementById("Modal");
+const registerModal2 = document.getElementById("registerModal");
+const loginBtn2 = document.getElementById("loginBtn");
 
 function logged() {
   // Login button
-  loginBtn.textContent = localStorage.getItem("username");
-  loginBtn.onclick = null;
-  loginBtn.href = "./profiili.html";
+  loginBtn2.textContent = localStorage.getItem("username");
+  loginBtn2.onclick = null;
+  loginBtn2.href = "./profiili.html";
 
   // Close modal
-  loginModal.style.display = "none";
-  registerModal.style.display = "none";
+  loginModal2.style.display = "none";
+  registerModal2.style.display = "none";
   document.documentElement.classList.remove("modal-open");
 }
 

@@ -95,6 +95,11 @@ async function fetchRestaurants(filterNumb) {
     location: r.location,
   }));
 
+  // Skip switch
+  if (filterNumb === 3) {
+    return await sortByFav(restaurants);
+  }
+
   switch (filterNumb) {
     case 1:
       await sortByName(restaurants);
@@ -149,12 +154,47 @@ async function sortByLoc(list) {
   }
 }
 
+// Sorting by favorites
+async function sortByFav(list) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Kirjaudu sisään nähdäksesi suosikkiravintolat");
+    sortByName(list);
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "https://media2.edu.metropolia.fi/restaurant/api/v1/users/token",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch favorites");
+    }
+    const data = await response.json();
+    const favoriteId = data.favouriteRestaurant;
+    if (!favoriteId) return [];
+
+    return list.filter((r) => r._id === favoriteId);
+  } catch (err) {
+    console.error(err);
+    sortByName(list);
+  }
+}
+
 /* -- Main menu restaurant data -- */
 async function main(filterNumb) {
   // Setting global filter
   window.currentRestaurantFilter =
     typeof filterNumb === "number" ? filterNumb : 0;
   const restaurants = await fetchRestaurants(filterNumb);
+
   // Printing out
   const table = document.querySelector("table");
   table.innerHTML = "";
@@ -182,6 +222,19 @@ async function main(filterNumb) {
         `
     );
   });
+
+  // Nearest restaurant highlight
+  const nearestRestaurant = await fetchRestaurants(2);
+  for (let i = 1; i < restaurants.length; i++) {
+    document.getElementById(i).classList.remove("nearest");
+  }
+  const nearestId =
+    nearestRestaurant.length > 0
+      ? restaurants.findIndex((r) => r._id === nearestRestaurant[0]._id) + 1
+      : -1;
+  if (nearestId !== -1) {
+    document.getElementById(nearestId).classList.add("nearest");
+  }
 }
 
 // Restaurant menu modal
@@ -223,7 +276,9 @@ async function showRestaurantModal(id) {
                 <h3> Päivän Menu </h3>
                 ${dailyMenuHTML}
                 <h3>Suosikki:
-                <input type="checkbox" id="favorite">
+                  <input type="checkbox" id="favorite" onclick="checkFavorite('${
+                    restaurants[id - 1]._id
+                  }')">
                 </h3>
             </ul>
         `
@@ -239,7 +294,9 @@ async function showRestaurantModal(id) {
                 <h3> Viikon Menu </h3>
                 ${weeklyMenuHTML}
                 <h3>Suosikki:
-                <input type="checkbox" id="favorite">
+                <input type="checkbox" id="favorite" onclick="checkFavorite('${
+                  restaurants[id - 1]._id
+                }')">
                 </h3>
             </ul>
         `
