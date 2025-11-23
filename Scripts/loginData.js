@@ -14,8 +14,6 @@ async function registerFunction() {
     return;
   }
 
-  console.log(username, password, email);
-
   try {
     const response = await fetch(
       "https://media2.edu.metropolia.fi/restaurant/api/v1/users",
@@ -28,11 +26,10 @@ async function registerFunction() {
 
     const data = await response.json();
 
-    if (response.ok && data.status === "success") {
-      console.log(data);
-      console.log(data.token);
-      localStorage.setItem("authToken", data.token);
+    if (response.ok) {
       alert("Rekisteröinti onnistui");
+      closeModal();
+      openModal();
     } else {
       alert(data.message || "Rekisteröinti epäonnistui");
     }
@@ -97,6 +94,7 @@ function logged() {
   loginModal2.style.display = "none";
   registerModal2.style.display = "none";
   document.documentElement.classList.remove("modal-open");
+  location.reload();
 }
 
 document.getElementById("loginSubmit").addEventListener("submit", function (e) {

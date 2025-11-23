@@ -71,6 +71,9 @@ async function profileEdit() {
         return (window.location.href = "/index.html");
       throw new Error(`HTTP error: ${response.status}`);
     }
+
+    localStorage.setItem("username", body.username);
+
     await profileFetch();
     alert("Profiilin päivitys onnistui");
     closeModal();

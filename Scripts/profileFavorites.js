@@ -5,7 +5,7 @@ const token = localStorage.getItem("token");
 function checkFavorite(restaurantId) {
   const favoriteCheckbox = document.getElementById("favorite");
 
-  if (!token) return alert("Kirjaudu sisään merkitäksesi suosikiksi");
+  if (!token) return closeModal(), openModal();
 
   if (favoriteCheckbox.checked) {
     markFavorite(restaurantId);
@@ -15,8 +15,6 @@ function checkFavorite(restaurantId) {
 
 // Mark favorite restaurant
 async function markFavorite(id) {
-  if (!token) return alert("Kirjaudu sisään merkitäksesi suosikiksi");
-
   const body = {};
   body.favouriteRestaurant = id;
 
