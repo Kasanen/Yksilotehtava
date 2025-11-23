@@ -1,4 +1,8 @@
-// -- User calls -- //
+// -----------------------------
+// ProfileFunctional: user profile helpers and UI handlers
+// Sections: fetch, edit, avatar upload, delete, logout, UI
+// -----------------------------
+// Token and DOM elements used across profile operations
 const token = localStorage.getItem("token");
 
 const accEl = document.getElementById("ACC");
@@ -6,7 +10,9 @@ const passEl = document.getElementById("PASS");
 const mailEl = document.getElementById("MAIL");
 const avatarEl = document.getElementById("AVATAR");
 
-// Fetch profile data
+// -----------------------------
+// Fetch profile data and populate UI
+// -----------------------------
 async function profileFetch() {
   try {
     const response = await fetch(
@@ -44,7 +50,9 @@ async function profileFetch() {
   }
 }
 
-// Edit profile data
+// -----------------------------
+// Edit profile data (username, password, email)
+// -----------------------------
 async function profileEdit() {
   if (!token) return (window.location.href = "/index.html");
 
@@ -83,14 +91,17 @@ async function profileEdit() {
   }
 }
 
-// Upload avatar listener
+// -----------------------------
+// Avatar upload handling
+// -----------------------------
+// Update preview and upload on file change
 avatarEl.addEventListener("change", (e) => {
   const file = e.target.files[0];
   avatarHolder.src = URL.createObjectURL(file);
   profileAvatarEdit(file);
 });
 
-// Upload avatar function
+// Upload avatar to server using FormData
 async function profileAvatarEdit(file) {
   const formData = new FormData();
   formData.append("avatar", file);
@@ -121,7 +132,9 @@ async function profileAvatarEdit(file) {
   }
 }
 
-// Delete account function
+// -----------------------------
+// Account deletion
+// -----------------------------
 async function deleteProfile() {
   try {
     const response = await fetch(
@@ -147,14 +160,18 @@ async function deleteProfile() {
 
 async function updateProfile() {}
 
-// -- Log out function -- //
+// -----------------------------
+// Log out helper
+// -----------------------------
 function logOut() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
   window.location.href = "/index.html";
 }
 
-/* -- TopBar -- */
+// -----------------------------
+// TopBar (shared UI)
+// -----------------------------
 // Burger dropdown
 var brgr = document.getElementById("myLinks");
 
@@ -166,7 +183,9 @@ function openBurger() {
   }
 }
 
-/* -- Modal -- */
+// -----------------------------
+// Edit modal (profile page)
+// -----------------------------
 const editModal = document.getElementById("Modal");
 const loginBtn = document.getElementById("loginBtn");
 
@@ -180,14 +199,16 @@ function closeModal() {
   document.documentElement.classList.remove("modal-open");
 }
 
-/* -- Window -- */
+// Close modal when clicking outside
 window.onclick = function (event) {
   if (event.target == editModal) {
     closeModal();
   }
 };
 
-// -- On page load -- //
+// -----------------------------
+// Initialize profile on DOMContentLoaded
+// -----------------------------
 document.addEventListener("DOMContentLoaded", () => {
   profileFetch();
 });

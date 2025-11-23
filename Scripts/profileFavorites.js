@@ -1,7 +1,10 @@
-// -- Favorite calls -- //
+// -----------------------------
+// Favorite restaurant helpers
+// -----------------------------
+// Token read from localStorage (used to mark favorites)
 const token = localStorage.getItem("token");
 
-// Check favorite status
+// Check favorite checkbox state and trigger API update
 function checkFavorite(restaurantId) {
   const favoriteCheckbox = document.getElementById("favorite");
 
@@ -13,7 +16,7 @@ function checkFavorite(restaurantId) {
   }
 }
 
-// Mark favorite restaurant
+// Send favorite update to API (requires auth)
 async function markFavorite(id) {
   const body = {};
   body.favouriteRestaurant = id;

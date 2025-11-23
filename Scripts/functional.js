@@ -1,5 +1,7 @@
-/* -- TopBar -- */
-// Burger dropdown
+// -----------------------------
+// TopBar + Modal helpers
+// -----------------------------
+// Burger dropdown toggle (mobile)
 var brgr = document.getElementById("myLinks");
 
 function openBurger() {
@@ -10,7 +12,9 @@ function openBurger() {
   }
 }
 
-/* -- Modal -- */
+// -----------------------------
+// Modal elements and helpers
+// -----------------------------
 const dataModal = document.getElementById("Modal2");
 const loginModal = document.getElementById("Modal");
 const registerModal = document.getElementById("registerModal");
@@ -33,7 +37,7 @@ function closeModal() {
   document.documentElement.classList.remove("modal-open");
 }
 
-/* -- Window -- */
+// Close modals when clicking outside
 window.onclick = function (event) {
   if (
     event.target == dataModal ||
@@ -44,7 +48,9 @@ window.onclick = function (event) {
   }
 };
 
-// -- On page load -- //
+// -----------------------------
+// Page initialization
+// -----------------------------
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   const username = localStorage.getItem("username");

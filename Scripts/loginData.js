@@ -1,5 +1,7 @@
-// -- Registration and Login Functions -- //
-// Registration
+// -----------------------------
+// Registration & Login helpers
+// -----------------------------
+// Register a new user (sends username/password/email)
 async function registerFunction() {
   const accEl = document.getElementById("ACCReg");
   const passEl = document.getElementById("PASSReg");
@@ -39,7 +41,7 @@ async function registerFunction() {
   }
 }
 
-// Login
+// Login user and persist token+username to localStorage
 async function loginFunction() {
   const accEl = document.getElementById("ACC");
   const passEl = document.getElementById("PASS");
@@ -78,25 +80,28 @@ async function loginFunction() {
   }
 }
 
-// -- Login state -- //
-// Modal
+// -----------------------------
+// Login state helpers and form bindings
+// -----------------------------
+// Modal elements used during login/registration
 const loginModal2 = document.getElementById("Modal");
 const registerModal2 = document.getElementById("registerModal");
 const loginBtn2 = document.getElementById("loginBtn");
 
 function logged() {
-  // Login button
+  // Update login button to point to profile
   loginBtn2.textContent = localStorage.getItem("username");
   loginBtn2.onclick = null;
   loginBtn2.href = "./profiili.html";
 
-  // Close modal
+  // Close modal and reload to update UI
   loginModal2.style.display = "none";
   registerModal2.style.display = "none";
   document.documentElement.classList.remove("modal-open");
   location.reload();
 }
 
+// Form submit handlers
 document.getElementById("loginSubmit").addEventListener("submit", function (e) {
   e.preventDefault();
   loginFunction();

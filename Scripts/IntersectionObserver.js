@@ -1,7 +1,10 @@
-/* -- Scroll button -- */
+// -----------------------------
+// IntersectionObserver: toggle destination button text/target
+// -----------------------------
 const mapSection = document.querySelector("#m");
 const destinationButton = document.querySelector("#dest-Btn");
 
+// Observe when the map section crosses the viewport threshold
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Main page for Opira - shows student restaurants and a map -->
 <html lang="fi">
   <head>
     <meta name="description" content="JavaScriptModuulit" />
@@ -7,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Opira</title>
 
-    <!--Style-->
+    <!-- Stylesheets -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -22,6 +23,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
 
+    <!-- Leaflet CSS for the interactive map -->
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -29,13 +31,14 @@
       crossorigin=""
     />
 
-    <!--Scripts-->
+    <!-- JavaScript modules (deferred to keep page responsive) -->
     <script src="./Scripts/data.js" defer></script>
     <script src="./Scripts/functional.js" defer></script>
     <script src="./Scripts/IntersectionObserver.js" defer></script>
     <script src="./Scripts/loginData.js" defer></script>
     <script src="./Scripts/profileFavorites.js" defer></script>
 
+    <!-- Leaflet JS (map functionality) -->
     <script
       src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
       integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -44,7 +47,7 @@
   </head>
 
   <body>
-    <!--TopBar-->
+    <!-- Navigation bar -->
     <div class="topnav">
       <a href="./index.html" class="active">Opira</a>
       <div id="myLinks">
@@ -57,14 +60,15 @@
       </a>
     </div>
 
-    <!--Content-->
+    <!-- Page content -->
 
-    <!--Home-->
+    <!-- Home / Restaurants list -->
     <section id="h" class="home">
       <div>
         <h1>Tervetuloa Opiran sivuille!</h1>
         <p>Täältä näet suomen opiskelijaravintolat kätevästi</p>
 
+        <!-- Filter dropdown for sorting and menu type selection -->
         <div class="dropdown">
           <button class="dropbtn">Filtteröi</button>
           <div class="dropdown-content">
@@ -80,11 +84,11 @@
         <div class="flex-container">
           <div class="flex-item" style="height: 400px; overflow: auto">
             <table>
-              <!-- add restaurants here -->
+              <!-- Restaurant rows are inserted here by `Scripts/data.js` -->
             </table>
-            <!-- Modal -->
+            <!-- Small modal for showing restaurant info -->
             <div id="Modal2" class="modal">
-              <!-- Modal content -->
+              <!-- Content inserted dynamically into this element -->
               <div id="modalText" class="modal-content"></div>
             </div>
           </div>
@@ -92,15 +96,15 @@
       </div>
     </section>
 
-    <!--Destination button-->
+    <!-- Destination button: scrolls down to the map -->
     <a href="#m"><button id="dest-Btn">⬇ Siirry alas ⬇</button></a>
 
-    <!--Map-->
+    <!-- Map section (Leaflet map mounts into `#map`) -->
     <section id="m" class="home">
       <div id="map"></div>
     </section>
 
-    <!-- Login Modal -->
+    <!-- Login Modal (opens when user clicks 'Kirjaudu') -->
     <div id="Modal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
@@ -116,7 +120,7 @@
       </div>
     </div>
 
-    <!-- Register Modal -->
+    <!-- Register Modal (new user sign-up) -->
     <div id="registerModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">

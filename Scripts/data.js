@@ -1,6 +1,9 @@
 const url = "https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants";
 
-/* -- Base -- */
+// -----------------------------
+// API / Data helpers
+// -----------------------------
+// Generic fetch wrapper used for menu and restaurants endpoints.
 async function getMenu(requestURL) {
   try {
     const response = await fetch(requestURL, {
@@ -18,11 +21,11 @@ async function getMenu(requestURL) {
   }
 }
 
+// Fetch daily menu for a restaurant (Finnish locale)
 async function fetchDailyMenu(id) {
   const data = await getMenu(
     `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/daily/${id}/fi`
   );
-  console.log("Daily menu data:", data);
 
   const courses = data.courses;
   return courses.map((c) => ({
@@ -32,6 +35,7 @@ async function fetchDailyMenu(id) {
   }));
 }
 
+// Fetch weekly menu and normalize days/courses
 async function fetchWeeklyMenu(id) {
   const data = await getMenu(
     `https://media2.edu.metropolia.fi/restaurant/api/v1/restaurants/weekly/${id}/fi`
@@ -47,7 +51,10 @@ async function fetchWeeklyMenu(id) {
   }));
 }
 
-// User location
+// -----------------------------
+// Geolocation utilities
+// -----------------------------
+// Callback-style geolocation (used for map initialization)
 function getUserLocation(callback) {
   navigator.geolocation.getCurrentPosition(
     (position) => {
@@ -62,7 +69,7 @@ function getUserLocation(callback) {
   );
 }
 
-// Promise wrapper for geolocation
+// Promise wrapper for geolocation (used by sorting)
 function getUserLocationPromise() {
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) {
@@ -75,7 +82,7 @@ function getUserLocationPromise() {
   });
 }
 
-// Calculating distance
+// Haversine distance in kilometers between two lat/lon points
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
@@ -90,10 +97,13 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-/* -- Fetch restaurants show -- */
+// -----------------------------
+// Restaurants fetching + sorting
+// -----------------------------
 async function fetchRestaurants(filterNumb) {
   const data = await getMenu(url);
 
+  // Normalize restaurant data to the fields used in UI
   const restaurants = data.map((r) => ({
     _id: r._id,
     address: r.address,
@@ -105,7 +115,7 @@ async function fetchRestaurants(filterNumb) {
     location: r.location,
   }));
 
-  // Skip switch
+  // If favorites filter requested, return favorites result
   if (filterNumb === 3) {
     return await sortByFav(restaurants);
   }
@@ -123,7 +133,7 @@ async function fetchRestaurants(filterNumb) {
   return restaurants;
 }
 
-// Sorting by name
+// Simple alphabetical sort by name (in-place)
 function sortByName(list) {
   list.sort((a, b) => {
     const nameA = a.name.toUpperCase();
@@ -138,7 +148,7 @@ function sortByName(list) {
   });
 }
 
-// Sorting by location
+// Sort list by distance to the user's current location
 async function sortByLoc(list) {
   try {
     const loc = await getUserLocationPromise();
@@ -164,7 +174,7 @@ async function sortByLoc(list) {
   }
 }
 
-// Sorting by favorites
+// Filter restaurants according to the user's favorite (requires auth token)
 async function sortByFav(list) {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -198,14 +208,16 @@ async function sortByFav(list) {
   }
 }
 
-/* -- Main menu restaurant data -- */
+// -----------------------------
+// UI: render restaurant list and manage current filter
+// -----------------------------
 async function main(filterNumb) {
-  // Setting global filter
+  // Store current filter globally for modal lookups
   window.currentRestaurantFilter =
     typeof filterNumb === "number" ? filterNumb : 0;
   const restaurants = await fetchRestaurants(filterNumb);
 
-  // Printing out
+  // Render table header and rows
   const table = document.querySelector("table");
   table.innerHTML = "";
   table.insertAdjacentHTML(
@@ -233,7 +245,7 @@ async function main(filterNumb) {
     );
   });
 
-  // Nearest restaurant highlight
+  // Highlight nearest restaurant (based on location sort)
   const nearestRestaurant = await fetchRestaurants(2);
   for (let i = 1; i < restaurants.length; i++) {
     document.getElementById(i).classList.remove("nearest");
@@ -247,7 +259,9 @@ async function main(filterNumb) {
   }
 }
 
-// Restaurant menu modal
+// -----------------------------
+// Modal: show menu (daily/weekly) for a selected restaurant
+// -----------------------------
 async function showRestaurantModal(id) {
   const filterNumb = window.currentRestaurantFilter ?? 0;
   const restaurants = await fetchRestaurants(filterNumb);
@@ -284,14 +298,14 @@ async function showRestaurantModal(id) {
     : "<p>Viikon menu ei saatavilla</p>";
   const modalText = document.getElementById("modalText");
 
-  // Highlight text color
+  // Clear previous highlights and set new one
   for (let i = 1; i < restaurants.length; i++) {
     document.getElementById(i).classList.remove("highlight");
   }
   document.getElementById(id).classList.add("highlight");
 
   modalText.innerHTML = "";
-  // Filtered selection
+  // Show daily or weekly HTML based on user setting
   const savedType = localStorage.getItem("menuType");
   switch (savedType) {
     case "daily":
@@ -338,7 +352,9 @@ async function showRestaurantModal(id) {
   document.documentElement.classList.add("modal-open");
 }
 
-// Weekly / Daily selector
+// -----------------------------------------------------------------
+// Menu type selector (daily/weekly) — stores selection to localStorage
+// -----------------------------------------------------------------
 document.querySelectorAll(".menuType").forEach((link) => {
   link.addEventListener("click", function (e) {
     e.preventDefault();
@@ -351,10 +367,13 @@ document.querySelectorAll(".menuType").forEach((link) => {
   });
 });
 
-/* -- MAP -- */
+// -----------------------------
+// Map output (Leaflet)
+// -----------------------------
 async function mapOutput() {
   const restaurants = await fetchRestaurants(1);
 
+  // Initialize map around user location
   getUserLocation((loc) => {
     const userLat = loc.lat;
     const userLon = loc.lon;
@@ -373,10 +392,12 @@ async function mapOutput() {
       iconSize: [20, 20],
     });
 
+    // Add user marker
     getUserLocation((loc) => {
       L.marker([userLat, userLon], { icon: redDivIcon }).addTo(map);
     });
 
+    // Add restaurant markers
     restaurants.map((restaurant) => {
       let marker = L.marker([
         restaurant.location.coordinates[1],
@@ -391,6 +412,7 @@ async function mapOutput() {
 
 /* Modal for data */
 
+// Open the restaurant modal (expects `dataModal` element present in DOM)
 function openModal() {
   dataModal.style.display = "flex";
   document.documentElement.classList.add("modal-open");
