@@ -65,7 +65,7 @@ li {
 
 button {
   background-color: goldenrod;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 16px;
   font-size: 16px;
   border: none;
@@ -163,7 +163,7 @@ section {
 /* Dropdown filter */
 .dropbtn {
   background-color: goldenrod;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 16px;
   font-size: 16px;
   border: none;
@@ -207,13 +207,15 @@ section {
 /* -- DestButton -- */
 #dest-Btn {
   background-color: goldenrod;
-  color: white;
+  color: rgb(0, 0, 0);
   padding: 30px;
   font-size: 30px;
-  width: 100%;
+  width: 96%;
   border: none;
   cursor: pointer;
   border-radius: 0px;
+  display: block;
+  text-align: center;
 }
 
 /* -- MapPage -- */

@@ -2,7 +2,7 @@
 // IntersectionObserver: toggle destination button text/target
 // -----------------------------
 const mapSection = document.querySelector("#m");
-const destinationButton = document.querySelector("#dest-Btn");
+const destinationButton = document.getElementById("dest-Btn");
 
 // Observe when the map section crosses the viewport threshold
 const observer = new IntersectionObserver(
@@ -10,10 +10,10 @@ const observer = new IntersectionObserver(
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         destinationButton.textContent = "⬆ Siirry ylös ⬆";
-        destinationButton.parentElement.href = "#h";
+        destinationButton.href = "#h";
       } else {
         destinationButton.textContent = "⬇ Siirry alas ⬇";
-        destinationButton.parentElement.href = "#m";
+        destinationButton.href = "#m";
       }
     });
   },

@@ -51,11 +51,18 @@
     <div class="topnav">
       <a href="./index.html" class="active">Opira</a>
       <div id="myLinks">
-        <a href="#h">Ravintolat</a>
-        <a href="#m">Kartta</a>
-        <a id="loginBtn" onclick="openModal()">Kirjaudu</a>
+        <a href="#h" aria-label="Ravintolat kohta kotisivulla">Ravintolat</a>
+        <a href="#m" aria-label="Kartta kohta kotisivulla">Kartta</a>
+        <a id="loginBtn" onclick="openModal()" aria-label="Kirjautumisen näkymä"
+          >Kirjaudu</a
+        >
       </div>
-      <a href="javascript:void(0);" class="icon" onclick="openBurger()">
+      <a
+        href="javascript:void(0);"
+        class="icon"
+        onclick="openBurger()"
+        aria-label="Avaa valikko"
+      >
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -97,7 +104,7 @@
     </section>
 
     <!-- Destination button: scrolls down to the map -->
-    <a href="#m"><button id="dest-Btn">⬇ Siirry alas ⬇</button></a>
+    <a href="#m" id="dest-Btn">⬇ Siirry alas ⬇</a>
 
     <!-- Map section (Leaflet map mounts into `#map`) -->
     <section id="m" class="home">
@@ -112,7 +119,7 @@
         <h2>Kirjaudu sisään!</h2>
         <p>Tietosi ovat suojattu.</p>
         <form id="loginSubmit">
-          <input id="ACC" type="username" placeholder="Käyttäjätunnus" />
+          <input id="ACC" type="text" placeholder="Käyttäjätunnus" />
           <input id="PASS" type="password" placeholder="Salasana" />
           <input type="submit" value="Kirjaudu" />
           <a onClick="openRegisterModal()">Uusi käyttäjä?</a>
@@ -128,7 +135,7 @@
         <h2>Rekisteröidy!</h2>
         <p>Tietosi ovat suojattu.</p>
         <form id="registerSubmit">
-          <input id="ACCReg" type="username" placeholder="Käyttäjätunnus" />
+          <input id="ACCReg" type="text" placeholder="Käyttäjätunnus" />
           <input id="PASSReg" type="password" placeholder="Salasana" />
           <input id="MAILReg" type="email" placeholder="Sähköposti" />
 
