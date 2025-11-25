@@ -32,6 +32,11 @@ Small web project for viewing student restaurants and menus (Leaflet map + menus
 - The app stores an auth token in `localStorage` under `token` and username under `username`.
 - Register or login via the modals in the UI. Favorite restaurant require a logged-in user.
 
+## Final changes
+
+- Input type changed from "username" to "text". Caused troubles in style.
+- Improved responsive view by removing margin from flex-item and width from dest-Btn (Style.css).
+
 ## Notes & Troubleshooting
 
 - If map tiles or API calls fail, check network access and the third-party API availability.

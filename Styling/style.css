@@ -210,7 +210,6 @@ section {
   color: rgb(0, 0, 0);
   padding: 30px;
   font-size: 30px;
-  width: 96%;
   border: none;
   cursor: pointer;
   border-radius: 0px;
@@ -248,7 +247,6 @@ section {
   background-color: rgba(85, 109, 155, 0.267);
   padding: 20px;
   text-align: center;
-  margin: 10px;
 }
 
 .flex-item a {
@@ -336,7 +334,7 @@ ul li {
 }
 
 /* Modal inputs */
-input[type="username"],
+input[type="text"],
 input[type="password"],
 input[type="email"],
 select {
