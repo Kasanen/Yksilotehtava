@@ -38,7 +38,7 @@ async function markFavorite(id) {
 
     if (!response.ok) {
       if (response.status === 401)
-        return (window.location.href = "/index.html");
+        return (window.location.href = "./index.html");
       throw new Error(`HTTP error: ${response.status}`);
     }
     const data = await response.json();

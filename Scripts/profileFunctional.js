@@ -54,7 +54,7 @@ async function profileFetch() {
 // Edit profile data (username, password, email)
 // -----------------------------
 async function profileEdit() {
-  if (!token) return (window.location.href = "/index.html");
+  if (!token) return (window.location.href = "./index.html");
 
   const body = {};
   if (accEl && accEl.value.trim()) body.username = accEl.value.trim();
@@ -76,7 +76,7 @@ async function profileEdit() {
 
     if (!response.ok) {
       if (response.status === 401)
-        return (window.location.href = "/index.html");
+        return (window.location.href = "./index.html");
       throw new Error(`HTTP error: ${response.status}`);
     }
 
@@ -87,7 +87,7 @@ async function profileEdit() {
     closeModal();
   } catch (err) {
     console.error(err);
-    window.location.href = "/index.html";
+    window.location.href = "./index.html";
   }
 }
 
@@ -166,7 +166,7 @@ async function updateProfile() {}
 function logOut() {
   localStorage.removeItem("token");
   localStorage.removeItem("username");
-  window.location.href = "/index.html";
+  window.location.href = "./index.html";
 }
 
 // -----------------------------
