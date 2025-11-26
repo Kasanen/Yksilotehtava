@@ -34,8 +34,9 @@ Small web project for viewing student restaurants and menus (Leaflet map + menus
 
 ## Final changes
 
-- Input type changed from "username" to "text". Caused troubles in style.
+- Input type changed from `username` to `text`. Caused troubles in style.
 - Improved responsive view by removing margin from flex-item and width from dest-Btn (Style.css).
+- Changed URL from `/index.html` to `./index.html` in following files: profileFavorites.js and profileFunctional.js .
 
 ## Notes & Troubleshooting
 
